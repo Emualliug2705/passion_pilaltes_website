@@ -14,22 +14,32 @@ const StudioPhotoCarousel = ({ photos = [], studioName = "Studio" }) => {
   const [canPrev, setCanPrev] = useState(false);
   const [canNext, setCanNext] = useState(false);
 
-  const scrollPrev = useCallback(() => emblaApi && emblaApi.scrollPrev(), [emblaApi]);
-  const scrollNext = useCallback(() => emblaApi && emblaApi.scrollNext(), [emblaApi]);
-  const scrollTo = useCallback((i) => emblaApi && emblaApi.scrollTo(i), [emblaApi]);
+  const scrollPrev = useCallback(() => {
+    if (emblaApi) emblaApi.scrollPrev();
+  }, [emblaApi]);
+  const scrollNext = useCallback(() => {
+    if (emblaApi) emblaApi.scrollNext();
+  }, [emblaApi]);
+  const scrollTo = useCallback((i) => {
+    if (emblaApi) emblaApi.scrollTo(i);
+  }, [emblaApi]);
 
   const onSelect = useCallback((api) => {
     if (!api) return;
     setSelectedIndex(api.selectedScrollSnap());
     setCanPrev(api.canScrollPrev());
     setCanNext(api.canScrollNext());
-  }, []);
+  }, [setSelectedIndex, setCanPrev, setCanNext]);
 
   useEffect(() => {
-    if (!emblaApi) return;
+    if (!emblaApi) return undefined;
     onSelect(emblaApi);
     emblaApi.on("select", onSelect);
     emblaApi.on("reInit", onSelect);
+    return () => {
+      emblaApi.off("select", onSelect);
+      emblaApi.off("reInit", onSelect);
+    };
   }, [emblaApi, onSelect]);
 
   if (!photos.length) return null;
@@ -73,11 +83,11 @@ const StudioPhotoCarousel = ({ photos = [], studioName = "Studio" }) => {
         <ChevronRight size={20} />
       </button>
 
-      {/* Dots */}
+      {/* Dots — keyed by the photo URL they target */}
       <div className="flex justify-center gap-2 mt-6">
-        {photos.map((_, i) => (
+        {photos.map((src, i) => (
           <button
-            key={i}
+            key={`dot-${src}`}
             type="button"
             onClick={() => scrollTo(i)}
             aria-label={`Aller à la photo ${i + 1}`}

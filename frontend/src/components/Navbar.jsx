@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X, UserCircle2 } from "lucide-react";
 import { siteInfo } from "../mock";
 
-const links = [
+const NAV_LINKS = [
   { to: "/", label: "Accueil" },
   { to: "/le-studio", label: "Le Studio" },
   { to: "/nantes", label: "Nantes" },
@@ -11,34 +11,45 @@ const links = [
   { to: "/contact", label: "Contact" }
 ];
 
+const PATH_TO_STUDIO = {
+  "/nantes": "Nantes",
+  "/la-baule": "La Baule"
+};
+
+const studioFromPath = (path) => PATH_TO_STUDIO[path] || "";
+
+const buildDecouverteHref = (studio) => {
+  if (!studio) return "/contact";
+  return `/contact?studio=${encodeURIComponent(studio)}`;
+};
+
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const location = useLocation();
 
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 30);
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
+  const handleScroll = useCallback(() => {
+    setScrolled(window.scrollY > 30);
   }, []);
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [handleScroll]);
 
   useEffect(() => {
     setOpen(false);
   }, [location.pathname]);
 
-  const currentStudio =
-    location.pathname === "/nantes" ? "Nantes" :
-    location.pathname === "/la-baule" ? "La Baule" : "";
-  const decouverteHref = currentStudio
-    ? `/contact?studio=${encodeURIComponent(currentStudio)}`
-    : "/contact";
+  const currentStudio = studioFromPath(location.pathname);
+  const decouverteHref = buildDecouverteHref(currentStudio);
+
+  const headerClasses = scrolled
+    ? "bg-[#faf7f2]/95 backdrop-blur-md shadow-sm py-3"
+    : "bg-transparent py-6";
 
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled ? "bg-[#faf7f2]/95 backdrop-blur-md shadow-sm py-3" : "bg-transparent py-6"
-      }`}
-    >
+    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${headerClasses}`}>
       <div className="max-w-7xl mx-auto px-6 md:px-10 flex items-center justify-between">
         <Link to="/" className="flex flex-col leading-none group">
           <span className="font-serif text-2xl md:text-[28px] tracking-wide text-[#3a2f24]">
@@ -50,17 +61,20 @@ const Navbar = () => {
         </Link>
 
         <nav className="hidden lg:flex items-center gap-8" aria-label="Navigation principale">
-          {links.map((l) => (
-            <Link
-              key={l.to}
-              to={l.to}
-              className={`nav-link text-[13px] uppercase tracking-[0.25em] text-[#3a2f24] hover:text-[#7a6a4e] transition-colors ${
-                location.pathname === l.to ? "active text-[#7a6a4e]" : ""
-              }`}
-            >
-              {l.label}
-            </Link>
-          ))}
+          {NAV_LINKS.map((l) => {
+            const isActive = location.pathname === l.to;
+            return (
+              <Link
+                key={l.to}
+                to={l.to}
+                className={`nav-link text-[13px] uppercase tracking-[0.25em] text-[#3a2f24] hover:text-[#7a6a4e] transition-colors ${
+                  isActive ? "active text-[#7a6a4e]" : ""
+                }`}
+              >
+                {l.label}
+              </Link>
+            );
+          })}
           <a
             href={siteInfo.planningUrl}
             target="_blank"
@@ -80,7 +94,7 @@ const Navbar = () => {
 
         <button
           className="lg:hidden text-[#3a2f24] p-2"
-          onClick={() => setOpen(!open)}
+          onClick={() => setOpen((prev) => !prev)}
           aria-label="menu"
         >
           {open ? <X size={24} /> : <Menu size={24} />}
@@ -90,7 +104,7 @@ const Navbar = () => {
       {open && (
         <div className="lg:hidden bg-[#faf7f2] border-t border-[#e8e0d0] mt-3">
           <div className="px-6 py-6 flex flex-col gap-5">
-            {links.map((l) => (
+            {NAV_LINKS.map((l) => (
               <Link
                 key={l.to}
                 to={l.to}

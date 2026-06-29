@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import { Menu, X, UserCircle2 } from "lucide-react";
+import { siteInfo } from "../mock";
 
 const links = [
   { to: "/", label: "Accueil" },
@@ -19,15 +20,12 @@ const Navbar = () => {
     const onScroll = () => setScrolled(window.scrollY > 30);
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
-    // setScrolled is stable (from useState); onScroll defined locally
   }, []);
 
   useEffect(() => {
     setOpen(false);
-    // setOpen is stable (from useState)
   }, [location.pathname]);
 
-  // Detect current studio context for Cours découverte CTA
   const currentStudio =
     location.pathname === "/nantes" ? "Nantes" :
     location.pathname === "/la-baule" ? "La Baule" : "";
@@ -47,11 +45,11 @@ const Navbar = () => {
             Passion <span className="italic font-light">Pilates</span>
           </span>
           <span className="text-[10px] tracking-[0.4em] uppercase text-[#8a7a5e] mt-1">
-            Nantes · La Baule
+            Nantes &middot; La Baule
           </span>
         </Link>
 
-        <nav className="hidden lg:flex items-center gap-10" aria-label="Navigation principale">
+        <nav className="hidden lg:flex items-center gap-8" aria-label="Navigation principale">
           {links.map((l) => (
             <Link
               key={l.to}
@@ -63,9 +61,18 @@ const Navbar = () => {
               {l.label}
             </Link>
           ))}
+          <a
+            href={siteInfo.planningUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-2 text-[12px] uppercase tracking-[0.25em] px-5 py-3 bg-[#7a6a4e] text-[#faf7f2] hover:bg-[#3a2f24] transition-colors duration-300"
+          >
+            <UserCircle2 size={14} />
+            Élève
+          </a>
           <Link
             to={decouverteHref}
-            className="text-[12px] uppercase tracking-[0.25em] px-6 py-3 border border-[#3a2f24] text-[#3a2f24] hover:bg-[#3a2f24] hover:text-[#faf7f2] transition-colors duration-300"
+            className="text-[12px] uppercase tracking-[0.25em] px-5 py-3 border border-[#3a2f24] text-[#3a2f24] hover:bg-[#3a2f24] hover:text-[#faf7f2] transition-colors duration-300"
           >
             Cours découverte
           </Link>
@@ -92,6 +99,15 @@ const Navbar = () => {
                 {l.label}
               </Link>
             ))}
+            <a
+              href={siteInfo.planningUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center justify-center gap-2 text-sm uppercase tracking-[0.25em] px-6 py-3 bg-[#7a6a4e] text-[#faf7f2]"
+            >
+              <UserCircle2 size={14} />
+              Espace élève
+            </a>
             <Link
               to={decouverteHref}
               className="text-sm uppercase tracking-[0.25em] px-6 py-3 border border-[#3a2f24] text-[#3a2f24] text-center"

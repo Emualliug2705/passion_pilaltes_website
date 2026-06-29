@@ -1,60 +1,95 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import { Clock, Info } from "lucide-react";
 import { useToast } from "../hooks/use-toast";
+import { services } from "../mock";
 
-const buildDiscoveryMessage = (name) => {
+const COURSE_TYPES = services.map((s) => s.title); // ["Cours Individuels", "Cours Duo", "Cours Semi-Collectifs"]
+
+const studioFragment = (studio) => {
+  if (studio && studio !== "Indifférent") return `au studio de ${studio}`;
+  return "dans l'un de vos studios";
+};
+
+const signature = (name) => {
   const cleanName = (name || "").trim();
+  return cleanName ? `Madame ${cleanName}` : "Madame";
+};
+
+const buildDiscoveryMessage = (name, studio) => {
   return [
     "Bonjour Madame ADRIEN,",
     "",
-    "j'aurais aimé m'inscrire pour un cours de découverte collectifs ou privé. Quelles sont les disponibilités ?",
+    `j'aurais aimé m'inscrire pour un cours de découverte collectifs ou privé ${studioFragment(studio)}. Quelles sont les disponibilités ?`,
     "",
     "Bien à vous,",
     "",
-    cleanName ? `Madame ${cleanName}` : "Madame"
+    signature(name)
   ].join("\n");
+};
+
+const buildInscriptionMessage = (name, studio, courseType) => {
+  const courseStr = courseType ? `à un ${courseType}` : "à vos cours";
+  return [
+    "Bonjour Madame ADRIEN,",
+    "",
+    `je souhaiterais m'inscrire ${courseStr} ${studioFragment(studio)}. Pourriez-vous m'indiquer les modalités d'inscription ainsi que les créneaux disponibles ?`,
+    "",
+    "Bien à vous,",
+    "",
+    signature(name)
+  ].join("\n");
+};
+
+const buildTemplate = (requestType, { name, studio, courseType }) => {
+  if (requestType === "decouverte") return buildDiscoveryMessage(name, studio);
+  if (requestType === "inscription") return buildInscriptionMessage(name, studio, courseType);
+  return "";
 };
 
 const ContactForm = ({ defaultStudio = "", defaultRequest = "decouverte" }) => {
   const { toast } = useToast();
 
-  // Whether the message is still the auto-generated template (and therefore
-  // should keep syncing with the name field). As soon as the user edits the
-  // textarea manually, this becomes false and the auto-fill stops.
-  const [messageAutoFilled, setMessageAutoFilled] = useState(defaultRequest === "decouverte");
+  const [messageAutoFilled, setMessageAutoFilled] = useState(
+    defaultRequest === "decouverte" || defaultRequest === "inscription"
+  );
 
-  const initialMessage = defaultRequest === "decouverte" ? buildDiscoveryMessage("") : "";
+  const initialMessage = useMemo(
+    () => buildTemplate(defaultRequest, { name: "", studio: defaultStudio, courseType: "" }),
+    [defaultRequest, defaultStudio]
+  );
 
   const [form, setForm] = useState({
     name: "",
     email: "",
     phone: "",
     studio: defaultStudio,
+    courseType: "",
     requestType: defaultRequest,
     message: initialMessage
   });
   const [submitting, setSubmitting] = useState(false);
-
-  // Track last auto-generated message to detect manual edits
   const lastAutoMessageRef = useRef(initialMessage);
 
-  // Keep studio in sync if parent default changes (e.g. URL param hydration)
+  // Sync defaultStudio (e.g. URL param hydration)
   useEffect(() => {
     if (defaultStudio) {
       setForm((prev) => ({ ...prev, studio: defaultStudio }));
     }
   }, [defaultStudio]);
 
-  // When the name changes AND the message is still the auto template,
-  // regenerate the message so the signature stays in sync.
+  // Auto-regenerate the message whenever inputs change AND user hasn't taken over
   useEffect(() => {
-    if (messageAutoFilled && form.requestType === "decouverte") {
-      const next = buildDiscoveryMessage(form.name);
-      lastAutoMessageRef.current = next;
-      setForm((prev) => ({ ...prev, message: next }));
-    }
+    if (!messageAutoFilled) return;
+    if (form.requestType !== "decouverte" && form.requestType !== "inscription") return;
+    const next = buildTemplate(form.requestType, {
+      name: form.name,
+      studio: form.studio,
+      courseType: form.courseType
+    });
+    lastAutoMessageRef.current = next;
+    setForm((prev) => (prev.message === next ? prev : { ...prev, message: next }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [form.name]);
+  }, [form.name, form.studio, form.courseType, form.requestType, messageAutoFilled]);
 
   const onChange = (e) => {
     const { name, value } = e.target;
@@ -63,8 +98,6 @@ const ContactForm = ({ defaultStudio = "", defaultRequest = "decouverte" }) => {
 
   const onMessageChange = (e) => {
     const value = e.target.value;
-    // If user edits to anything different from the auto-generated content,
-    // disable further auto fill.
     if (value !== lastAutoMessageRef.current) {
       setMessageAutoFilled(false);
     }
@@ -74,24 +107,28 @@ const ContactForm = ({ defaultStudio = "", defaultRequest = "decouverte" }) => {
   const onRequestTypeChange = (newType) => {
     setForm((prev) => {
       const next = { ...prev, requestType: newType };
-      if (newType === "decouverte") {
-        // Re-enable auto fill only if the message field is empty or was
-        // previously auto-filled. Otherwise we keep what the user typed.
-        const isEmpty = prev.message.trim() === "";
-        const stillAuto = prev.message === lastAutoMessageRef.current;
-        if (isEmpty || stillAuto) {
-          const tpl = buildDiscoveryMessage(prev.name);
-          lastAutoMessageRef.current = tpl;
-          setMessageAutoFilled(true);
-          next.message = tpl;
-        }
-      } else if (messageAutoFilled) {
-        // Switching away from découverte while still auto-filled → clear
+      const isTemplated = newType === "decouverte" || newType === "inscription";
+      const isEmpty = prev.message.trim() === "";
+      const stillAuto = prev.message === lastAutoMessageRef.current;
+      if (isTemplated && (isEmpty || stillAuto)) {
+        const tpl = buildTemplate(newType, {
+          name: prev.name,
+          studio: prev.studio,
+          courseType: prev.courseType
+        });
+        lastAutoMessageRef.current = tpl;
+        setMessageAutoFilled(true);
+        next.message = tpl;
+      } else if (!isTemplated && stillAuto) {
         next.message = "";
         setMessageAutoFilled(false);
       }
       return next;
     });
+  };
+
+  const onCourseTypeChange = (ct) => {
+    setForm((prev) => ({ ...prev, courseType: ct === prev.courseType ? "" : ct }));
   };
 
   const onSubmit = (e) => {
@@ -107,14 +144,15 @@ const ContactForm = ({ defaultStudio = "", defaultRequest = "decouverte" }) => {
         title: "Message envoyé",
         description: "Merci, Passion Pilates vous recontactera personnellement dès réception de votre message."
       });
-      const blankMsg = defaultRequest === "decouverte" ? buildDiscoveryMessage("") : "";
+      const blankMsg = buildTemplate(defaultRequest, { name: "", studio: defaultStudio, courseType: "" });
       lastAutoMessageRef.current = blankMsg;
-      setMessageAutoFilled(defaultRequest === "decouverte");
+      setMessageAutoFilled(defaultRequest === "decouverte" || defaultRequest === "inscription");
       setForm({
         name: "",
         email: "",
         phone: "",
         studio: defaultStudio,
+        courseType: "",
         requestType: defaultRequest,
         message: blankMsg
       });
@@ -122,6 +160,8 @@ const ContactForm = ({ defaultStudio = "", defaultRequest = "decouverte" }) => {
   };
 
   const isDecouverte = form.requestType === "decouverte";
+  const isInscription = form.requestType === "inscription";
+  const showHelper = (isDecouverte || isInscription) && messageAutoFilled;
 
   return (
     <form onSubmit={onSubmit} className="space-y-6">
@@ -206,12 +246,41 @@ const ContactForm = ({ defaultStudio = "", defaultRequest = "decouverte" }) => {
           </select>
         </div>
       </div>
+
+      {/* Course type — only visible for Inscription */}
+      {isInscription && (
+        <div>
+          <label className="block text-[11px] uppercase tracking-[0.25em] text-[#7a6a4e] mb-3">
+            Type de cours souhaité
+          </label>
+          <div className="grid sm:grid-cols-3 gap-2">
+            {COURSE_TYPES.map((ct) => (
+              <button
+                type="button"
+                key={ct}
+                onClick={() => onCourseTypeChange(ct)}
+                className={`px-3 py-3 text-xs uppercase tracking-[0.2em] border transition-colors ${
+                  form.courseType === ct
+                    ? "bg-[#7a6a4e] text-[#faf7f2] border-[#7a6a4e]"
+                    : "bg-transparent text-[#3a2f24] border-[#c9bda4] hover:border-[#3a2f24]"
+                }`}
+              >
+                {ct}
+              </button>
+            ))}
+          </div>
+          <p className="text-[11px] text-[#8a7a5e] italic mt-2">
+            Optionnel &mdash; précisera automatiquement votre message.
+          </p>
+        </div>
+      )}
+
       <div>
         <label className="block text-[11px] uppercase tracking-[0.25em] text-[#7a6a4e] mb-2">
           Message *{" "}
-          {isDecouverte && messageAutoFilled && (
+          {showHelper && (
             <span className="text-[10px] normal-case tracking-normal text-[#8a7a5e] italic ml-2">
-              (modèle pré-rempli — votre nom s&rsquo;ajoute automatiquement à la signature)
+              (modèle pré-rempli &mdash; votre nom, studio{isInscription ? " et type de cours" : ""} s&rsquo;ajoutent automatiquement)
             </span>
           )}
         </label>

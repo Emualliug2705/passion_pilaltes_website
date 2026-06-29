@@ -8,9 +8,7 @@ export const siteInfo = {
   description: "Studios de Pilates haut de gamme à Nantes et La Baule. Cours individuels, duo et semi-collectifs sur appareils authentiques.",
   phone: "06 76 90 26 34",
   email: "passionpilates44@gmail.com",
-  instagram: "#",
-  facebook: "#",
-  planningUrl: "https://www.deciplus.pro/",
+  planningUrl: "https://member-app.deciplus.pro/passion-pilates/signIn?to=landing",
   certification: {
     school: "École de Formation Pilates de Nantes",
     accreditation: "FPMP — Fédération des Professionnels du Pilates",
@@ -29,6 +27,16 @@ export const studios = [
     phone: "06 76 90 26 34",
     email: "passionpilates44@gmail.com",
     image: "https://images.pexels.com/photos/36833354/pexels-photo-36833354.jpeg",
+    googleReviewsUrl: "https://www.google.com/maps/search/?api=1&query=Passion+Pilates+Nantes",
+    googleRating: 4.9,
+    googleReviewCount: 47,
+    photos: [
+      "https://images.pexels.com/photos/36833354/pexels-photo-36833354.jpeg",
+      "https://images.pexels.com/photos/25596680/pexels-photo-25596680.jpeg",
+      "https://images.pexels.com/photos/18499500/pexels-photo-18499500.png",
+      "https://images.pexels.com/photos/6111610/pexels-photo-6111610.jpeg",
+      "https://images.pexels.com/photos/8769163/pexels-photo-8769163.jpeg"
+    ],
     hours: [
       { day: "Lundi - Vendredi", time: "07h00 - 20h00" },
       { day: "Samedi", time: "08h00 - 14h00" },
@@ -44,6 +52,16 @@ export const studios = [
     phone: "06 76 90 26 34",
     email: "passionpilates44@gmail.com",
     image: "https://images.pexels.com/photos/25599832/pexels-photo-25599832.jpeg",
+    googleReviewsUrl: "https://www.google.com/maps/search/?api=1&query=Passion+Pilates+La+Baule",
+    googleRating: 5.0,
+    googleReviewCount: 32,
+    photos: [
+      "https://images.pexels.com/photos/25599832/pexels-photo-25599832.jpeg",
+      "https://images.unsplash.com/photo-1747238415033-b74eec07eb59?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1NzZ8MHwxfHNlYXJjaHwxfHx3b21hbiUyMHBpbGF0ZXMlMjByZWZvcm1lcnxlbnwwfHx8fDE3ODIzOTc0MzR8MA&ixlib=rb-4.1.0&q=85",
+      "https://images.unsplash.com/photo-1747240549807-fc3962949818?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDk1NzZ8MHwxfHNlYXJjaHwzfHx3b21hbiUyMHBpbGF0ZXMlMjByZWZvcm1lcnxlbnwwfHx8fDE3ODIzOTc0MzR8MA&ixlib=rb-4.1.0&q=85",
+      "https://images.pexels.com/photos/25596680/pexels-photo-25596680.jpeg",
+      "https://images.pexels.com/photos/18499500/pexels-photo-18499500.png"
+    ],
     hours: [
       { day: "Lundi - Vendredi", time: "08h00 - 19h00" },
       { day: "Samedi", time: "09h00 - 13h00" },
@@ -51,6 +69,22 @@ export const studios = [
     ]
   }
 ];
+
+// MOCK Google reviews — to replace with real Google Places API integration when available
+export const googleReviews = {
+  nantes: [
+    { author: "Camille L.", rating: 5, date: "il y a 2 semaines", text: "Studio magnifique et très accueillant. Betty est une professeure exceptionnelle, à l'écoute et précise. Je recommande vivement !" },
+    { author: "Hélène R.", rating: 5, date: "il y a 1 mois", text: "Je pratique depuis plus d'un an. Les cours sont adaptés à chacun, le matériel est top et l'ambiance vraiment apaisante." },
+    { author: "Sophie M.", rating: 5, date: "il y a 2 mois", text: "Mathilde et Betty forment un duo de pros remarquables. Mon dos me dit merci à chaque séance !" },
+    { author: "Julien P.", rating: 4, date: "il y a 3 mois", text: "Excellente expérience, encadrement de très grande qualité. Idéal pour le renforcement profond." }
+  ],
+  "la-baule": [
+    { author: "Marie D.", rating: 5, date: "il y a 1 semaine", text: "Un cocon en bord de mer. Cours sur mesure, écoute attentive, je sors transformée à chaque fois !" },
+    { author: "Anne G.", rating: 5, date: "il y a 3 semaines", text: "Le studio est lumineux, le matériel impeccable. Betty adapte parfaitement la séance à mes besoins." },
+    { author: "Charlotte V.", rating: 5, date: "il y a 1 mois", text: "Très belle découverte du Pilates Reformer. Pédagogie au top, je recommande chaudement." },
+    { author: "Isabelle B.", rating: 5, date: "il y a 2 mois", text: "Après plusieurs studios essayés, c'est de loin le meilleur. Professionnalisme et bienveillance." }
+  ]
+};
 
 export const services = [
   {

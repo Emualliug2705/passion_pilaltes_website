@@ -1,9 +1,11 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { MapPin, Phone, Mail, Clock, ArrowRight } from "lucide-react";
-import { studios, siteInfo, services } from "../mock";
+import { studios, siteInfo, services, googleReviews } from "../mock";
 import ContactForm from "../components/ContactForm";
 import useReveal from "../hooks/useReveal";
+import StudioPhotoCarousel from "../components/StudioPhotoCarousel";
+import GoogleReviewsSection from "../components/sections/GoogleReviewsSection";
 
 const StudioHero = ({ studio }) => (
   <section className="relative h-[75vh] min-h-[520px] w-full overflow-hidden">
@@ -133,6 +135,22 @@ const StudioFooterCTA = ({ other }) => (
   </section>
 );
 
+const StudioPhotoGallery = ({ studio }) => (
+  <section className="py-20 md:py-24 px-6 md:px-10 bg-[#faf7f2]">
+    <div className="max-w-7xl mx-auto">
+      <div className="mb-10 reveal">
+        <p className="text-xs tracking-[0.4em] uppercase text-[#8a7a5e] mb-4">Visite en images</p>
+        <h2 className="font-serif text-3xl md:text-5xl text-[#2c2520]">
+          L&rsquo;atmosphère du <em className="italic font-light">studio {studio.name}</em>
+        </h2>
+      </div>
+      <div className="reveal">
+        <StudioPhotoCarousel photos={studio.photos} studioName={studio.name} />
+      </div>
+    </div>
+  </section>
+);
+
 const StudioPage = ({ studioId }) => {
   const studio = studios.find((s) => s.id === studioId);
   const other = studios.find((s) => s.id !== studioId);
@@ -149,7 +167,15 @@ const StudioPage = ({ studioId }) => {
     <div className="bg-[#faf7f2]">
       <StudioHero studio={studio} />
       <StudioInfoBlock studio={studio} />
+      <StudioPhotoGallery studio={studio} />
       <StudioServicesBlock studioName={studio.name} />
+      <GoogleReviewsSection
+        studioName={studio.name}
+        rating={studio.googleRating}
+        reviewCount={studio.googleReviewCount}
+        reviews={googleReviews[studio.id] || []}
+        googleReviewsUrl={studio.googleReviewsUrl}
+      />
 
       <section className="py-24 md:py-32 px-6 md:px-10">
         <div className="max-w-4xl mx-auto">

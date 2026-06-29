@@ -1,4 +1,5 @@
 import React from "react";
+import axios from "axios";
 import { Info } from "lucide-react";
 import { services } from "../mock";
 import { useToast } from "../hooks/use-toast";
@@ -8,6 +9,7 @@ import CourseTypeSelector from "./contact/CourseTypeSelector";
 import ContactFormFields from "./contact/ContactFormFields";
 
 const COURSE_TYPES = services.map((s) => s.title);
+const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 const MessageHelper = ({ requestType, isInscription }) => {
   const detail = isInscription ? "votre nom, studio et type de cours" : "votre nom et studio";
@@ -35,21 +37,34 @@ const ContactForm = ({ defaultStudio = "", defaultRequest = "decouverte" }) => {
   const isInscription = form.requestType === "inscription";
   const showHelper = messageAutoFilled;
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     if (!form.name || !form.email || !form.message) {
       toast({ title: "Champs manquants", description: "Merci de remplir les champs obligatoires." });
       return;
     }
     setSubmitting(true);
-    setTimeout(() => {
-      setSubmitting(false);
+    try {
+      await axios.post(`${API}/contact`, {
+        name: form.name,
+        email: form.email,
+        phone: form.phone || null,
+        studio: form.studio || null,
+        courseType: form.courseType || null,
+        requestType: form.requestType,
+        message: form.message
+      });
       toast({
         title: "Message envoyé",
-        description: "Merci, Passion Pilates vous recontactera personnellement dès réception de votre message."
+        description: "Merci, une copie vient de vous être envoyée. Passion Pilates vous recontactera sous 48h."
       });
       reset();
-    }, 900);
+    } catch (err) {
+      const detail = err?.response?.data?.detail || "Une erreur est survenue. Merci de réessayer ou de nous écrire directement.";
+      toast({ title: "Envoi impossible", description: detail });
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (

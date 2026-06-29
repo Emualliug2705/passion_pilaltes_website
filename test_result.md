@@ -165,6 +165,21 @@ backend:
         agent: "testing"
         comment: "Backend server running successfully with all type annotations. No startup errors or runtime issues detected. All API endpoints functioning correctly."
 
+  - task: "POST /api/contact endpoint - Email submission via Resend"
+    implemented: true
+    working: true
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Implemented /api/contact endpoint with ContactRequest model (name, email, phone, studio, courseType, requestType, message). Validates input via Pydantic, persists to MongoDB contact_messages collection, sends 2 emails via Resend API (main email to studio owner + confirmation to sender)."
+      - working: true
+        agent: "testing"
+        comment: "COMPREHENSIVE TESTING COMPLETE - All 9 tests PASSED ✅. Happy path tests: (1) decouverte request with studio=Nantes returned 200 with ok=true and id, (2) inscription request with courseType='Cours Duo' and studio='La Baule' returned 200 with ok=true and id. Validation tests: (3) empty name returned 422 with Pydantic error, (4) invalid email 'not-an-email' returned 422 with email validation error, (5) empty message returned 422 with min_length error. MongoDB persistence: (6) verified both contact messages persisted in contact_messages collection with correct data (name, email, requestType, studio, courseType, message). Regression tests: (7) GET /api/ returns Hello World, (8) POST /api/status creates status check, (9) GET /api/status returns list. Backend logs show all requests handled correctly. Email sending via Resend API working (using delivered@resend.dev test address). NO ISSUES FOUND."
+
 frontend:
   - task: "Studio pre-selection from Nantes page via Cours découverte button"
     implemented: true
@@ -408,21 +423,15 @@ frontend:
 
 metadata:
   created_by: "testing_agent"
-  version: "1.2"
-  test_sequence: 3
+  version: "1.3"
+  test_sequence: 4
   run_ui: true
 
 test_plan:
   current_focus:
-    - "ContactForm refactor - Regression Test A: Studio pre-selection from URL param"
-    - "ContactForm refactor - Regression Test B: Discovery template auto-fill"
-    - "ContactForm refactor - Regression Test C: Inscription mode with course type selector"
-    - "ContactForm refactor - Regression Test D: Manual edit stops auto-fill"
-    - "ContactForm refactor - Regression Test E: Toast notification on submit"
-    - "ContactForm refactor - Regression Test F: Validation"
-    - "ContactForm refactor - Regression Test G: Navigate from Nantes page"
+    - "POST /api/contact endpoint - Email submission via Resend"
   stuck_tasks: []
-  test_all: true
+  test_all: false
   test_priority: "high_first"
 
 agent_communication:
@@ -436,3 +445,7 @@ agent_communication:
     message: "NEW REGRESSION TESTING CYCLE: Testing ContactForm after code-quality refactor (extracted custom hook useContactForm + 3 sub-components: RequestTypeSelector, CourseTypeSelector, ContactFormFields). Running 7 comprehensive regression tests (A-G) covering 22 test scenarios."
   - agent: "testing"
     message: "REGRESSION TESTING COMPLETE: All 22 test scenarios PASSED ✅. ContactForm refactor successful with NO REGRESSIONS. All features working exactly as before: studio pre-selection from URL params, discovery template auto-fill with name/studio, inscription mode with course type selector, manual edit detection, toast notifications, validation, and navigation from studio pages. No console errors detected. Refactored code maintains 100% functional parity with original implementation."
+  - agent: "testing"
+    message: "NEW FEATURE TESTING: Testing newly added POST /api/contact endpoint with Resend email integration. Comprehensive test suite created with 9 tests covering happy paths (decouverte, inscription with courseType), validation (missing name, invalid email, empty message), MongoDB persistence, and regression tests for existing endpoints."
+  - agent: "testing"
+    message: "CONTACT ENDPOINT TESTING COMPLETE: ALL 9 TESTS PASSED ✅. Happy path tests: decouverte and inscription requests both returned 200 with ok=true and valid UUID. Validation tests: all 3 validation scenarios (empty name, invalid email, empty message) correctly returned 422 with appropriate Pydantic error messages. MongoDB persistence verified: both contact messages successfully saved to contact_messages collection with all fields intact. Regression tests: all existing endpoints (GET /api/, POST /api/status, GET /api/status) continue to work correctly. Email sending via Resend API working correctly using delivered@resend.dev test address. Backend logs confirm all requests handled properly. NO ISSUES FOUND - feature ready for production."

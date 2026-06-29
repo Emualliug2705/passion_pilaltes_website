@@ -1,7 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight, Award, Clock } from "lucide-react";
-import { aboutImage, galleryImages, siteInfo } from "../../mock";
+import { galleryImages, instructorPhotos, siteInfo } from "../../mock";
+import StudioPhotoCarousel from "../StudioPhotoCarousel";
 
 export const IntroSection = () => {
   return (
@@ -24,58 +25,55 @@ export const IntroSection = () => {
 export const AboutBettySection = () => {
   return (
     <section className="py-24 md:py-36 px-6 md:px-10">
-      <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 lg:gap-24 items-center">
-        <div className="reveal relative">
-          <div className="aspect-[4/5] overflow-hidden">
-            <img src={aboutImage} alt="Betty Adrien" className="w-full h-full object-cover" />
-          </div>
-          <div className="absolute -bottom-6 -right-6 hidden md:block bg-[#3a2f24] text-[#faf7f2] py-6 px-8 max-w-[220px]">
-            <p className="font-serif text-2xl italic leading-tight">Diplômées</p>
-            <p className="text-[10px] uppercase tracking-[0.2em] text-[#c9bda4] mt-2">
-              École de Formation<br/>Pilates de Nantes
+      <div className="max-w-7xl mx-auto">
+        <div className="grid md:grid-cols-2 gap-12 lg:gap-20 items-start mb-14">
+          <div className="reveal">
+            <p className="text-xs tracking-[0.4em] uppercase text-[#8a7a5e] mb-6">Vos professeures</p>
+            <h2 className="font-serif text-4xl md:text-5xl text-[#2c2520] leading-tight">
+              Betty &amp; Mathilde <em className="italic font-light">Adrien</em>
+            </h2>
+            <div className="w-16 h-px bg-[#8a7a5e] my-8" />
+            <p className="text-[#5c5147] leading-[1.9] mb-6">
+              Formées à la méthode Pilates dans la plus pure tradition, Betty et Mathilde accompagnent leurs élèves avec une rigueur attentive. Leur pédagogie privilégie l&rsquo;écoute du corps, la précision technique et le plaisir de pratiquer.
+            </p>
+            <p className="text-[#5c5147] leading-[1.9] mb-8">
+              «&nbsp;Le Pilates n&rsquo;est pas un sport, c&rsquo;est une discipline qui se vit. Notre rôle est de guider chacun vers une meilleure conscience de soi.&nbsp;»
             </p>
           </div>
-        </div>
-        <div className="reveal">
-          <p className="text-xs tracking-[0.4em] uppercase text-[#8a7a5e] mb-6">Vos professeures</p>
-          <h2 className="font-serif text-4xl md:text-5xl text-[#2c2520] leading-tight">
-            Betty &amp; Mathilde <em className="italic font-light">Adrien</em>
-          </h2>
-          <div className="w-16 h-px bg-[#8a7a5e] my-8" />
-          <p className="text-[#5c5147] leading-[1.9] mb-6">
-            Formées à la méthode Pilates dans la plus pure tradition, Betty et Mathilde accompagnent leurs élèves avec une rigueur attentive. Leur pédagogie privilégie l&rsquo;écoute du corps, la précision technique et le plaisir de pratiquer.
-          </p>
-          <p className="text-[#5c5147] leading-[1.9] mb-8">
-            «&nbsp;Le Pilates n&rsquo;est pas un sport, c&rsquo;est une discipline qui se vit. Notre rôle est de guider chacun vers une meilleure conscience de soi.&nbsp;»
-          </p>
 
-          <div className="border border-[#c9bda4]/60 bg-[#f2ebdf]/40 p-5 mb-10">
-            <div className="flex items-start gap-3">
-              <Award size={20} className="text-[#7a6a4e] mt-1 flex-shrink-0" />
-              <div>
-                <p className="text-xs uppercase tracking-[0.3em] text-[#7a6a4e] mb-2">Certification &amp; Agrément</p>
-                <p className="text-sm text-[#3a2f24] leading-relaxed">
-                  Diplômées de l&rsquo;<strong className="font-medium">{siteInfo.certification.school}</strong> &middot; Studio agréé{" "}
-                  <a
-                    href={siteInfo.certification.url}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="underline underline-offset-2 hover:text-[#7a6a4e]"
-                  >
-                    FPMP
-                  </a>{" "}
-                  (Fédération des Professionnels du Pilates).
-                </p>
+          <div className="reveal">
+            <div className="border border-[#c9bda4]/60 bg-[#f2ebdf]/40 p-6 mb-6">
+              <div className="flex items-start gap-3">
+                <Award size={22} className="text-[#7a6a4e] mt-1 flex-shrink-0" />
+                <div>
+                  <p className="text-xs uppercase tracking-[0.3em] text-[#7a6a4e] mb-2">Certification &amp; Agrément</p>
+                  <p className="text-sm text-[#3a2f24] leading-relaxed">
+                    Diplômées de l&rsquo;<strong className="font-medium">{siteInfo.certification.school}</strong> &middot; Studio agréé{" "}
+                    <a
+                      href={siteInfo.certification.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="underline underline-offset-2 hover:text-[#7a6a4e]"
+                    >
+                      FPMP
+                    </a>{" "}
+                    (Fédération des Professionnels du Pilates).
+                  </p>
+                </div>
               </div>
             </div>
+            <Link
+              to="/le-studio"
+              className="inline-flex items-center gap-3 text-xs uppercase tracking-[0.3em] text-[#3a2f24] border-b border-[#3a2f24] pb-2 hover:gap-5 transition-all"
+            >
+              En savoir plus <ArrowRight size={14} />
+            </Link>
           </div>
+        </div>
 
-          <Link
-            to="/le-studio"
-            className="inline-flex items-center gap-3 text-xs uppercase tracking-[0.3em] text-[#3a2f24] border-b border-[#3a2f24] pb-2 hover:gap-5 transition-all"
-          >
-            En savoir plus <ArrowRight size={14} />
-          </Link>
+        {/* Horizontal scrollable photo carousel for the instructors */}
+        <div className="reveal">
+          <StudioPhotoCarousel photos={instructorPhotos} studioName="Betty & Mathilde Adrien" />
         </div>
       </div>
     </section>

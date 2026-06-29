@@ -129,6 +129,15 @@ export const galleryImages = [
 export const heroImage = "https://images.pexels.com/photos/25596680/pexels-photo-25596680.jpeg";
 export const aboutImage = "https://images.pexels.com/photos/6111610/pexels-photo-6111610.jpeg";
 
+// Photos for the "Vos professeures" section (Betty & Mathilde ADRIEN).
+// Horizontally scrollable carousel — add as many photos as you want.
+export const instructorPhotos = [
+  "https://images.pexels.com/photos/6111610/pexels-photo-6111610.jpeg",
+  "https://images.pexels.com/photos/36833354/pexels-photo-36833354.jpeg",
+  "https://images.pexels.com/photos/25596680/pexels-photo-25596680.jpeg",
+  "https://images.pexels.com/photos/8769163/pexels-photo-8769163.jpeg"
+];
+
 export const testimonials = [
   {
     name: "Camille L.",

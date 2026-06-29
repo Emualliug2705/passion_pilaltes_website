@@ -20,9 +20,13 @@ const Navbar = () => {
     const onScroll = () => setScrolled(window.scrollY > 30);
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
+    // setScrolled is stable (from useState); onScroll defined locally
   }, []);
 
-  useEffect(() => { setOpen(false); }, [location.pathname]);
+  useEffect(() => {
+    setOpen(false);
+    // setOpen is stable (from useState)
+  }, [location.pathname]);
 
   return (
     <header
@@ -40,7 +44,7 @@ const Navbar = () => {
           </span>
         </Link>
 
-        <nav className="hidden lg:flex items-center gap-10">
+        <nav className="hidden lg:flex items-center gap-10" aria-label="Navigation principale">
           {links.map((l) => (
             <Link
               key={l.to}

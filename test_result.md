@@ -168,111 +168,138 @@ backend:
 frontend:
   - task: "Studio pre-selection from Nantes page via Cours découverte button"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/frontend/src/components/Navbar.jsx, /app/frontend/src/pages/Contact.jsx"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Implemented studio pre-selection logic in Navbar. When on /nantes page, Cours découverte button links to /contact?studio=Nantes"
+      - working: true
+        agent: "testing"
+        comment: "PASSED: Navigated to /nantes, clicked Cours découverte button. URL correctly shows /contact?studio=Nantes and Studio dropdown is pre-selected to 'Nantes'."
 
   - task: "Studio pre-selection from La Baule page via Cours découverte button"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/frontend/src/components/Navbar.jsx, /app/frontend/src/pages/Contact.jsx"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Implemented studio pre-selection logic in Navbar. When on /la-baule page, Cours découverte button links to /contact?studio=La%20Baule"
+      - working: true
+        agent: "testing"
+        comment: "PASSED: Navigated to /la-baule, clicked Cours découverte button. URL correctly shows /contact?studio=La%20Baule and Studio dropdown is pre-selected to 'La Baule'."
 
   - task: "No studio pre-selection from Home/other pages"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/frontend/src/components/Navbar.jsx, /app/frontend/src/pages/Contact.jsx"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "When on home or other pages, Cours découverte button links to /contact without studio param. Studio dropdown shows default 'Sélectionner'"
+      - working: true
+        agent: "testing"
+        comment: "PASSED: Navigated to home page, clicked Cours découverte button. URL is /contact without studio param. Studio dropdown shows default empty value (Sélectionner)."
 
   - task: "Default discovery message template pre-filled"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/frontend/src/components/ContactForm.jsx"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "ContactForm pre-fills message textarea with discovery template when requestType is 'decouverte'. Shows helper text about auto-fill."
+      - working: true
+        agent: "testing"
+        comment: "PASSED: On /contact page, 'Cours découverte' button is highlighted. Message textarea contains expected template with all parts: 'Bonjour Madame ADRIEN', 'cours de découverte collectifs ou privé', 'Quelles sont les disponibilités', 'Bien à vous', 'Madame'. Helper text '(modèle pré-rempli — votre nom s'ajoute automatiquement à la signature)' is visible."
 
   - task: "Auto-fill name in message signature"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/frontend/src/components/ContactForm.jsx"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "When user types in Nom field, signature in message automatically updates to 'Madame [name]'. Clears when name is removed."
+      - working: true
+        agent: "testing"
+        comment: "PASSED: Typed 'Dupont' in Nom field → signature updated to 'Madame Dupont'. Cleared Nom field → signature reverted to 'Madame'. Typed 'Martin' → signature updated to 'Madame Martin'. Auto-fill working perfectly."
 
   - task: "Manual edit stops auto-fill"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/frontend/src/components/ContactForm.jsx"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "When user manually edits message textarea, auto-fill is disabled (messageAutoFilled becomes false) and helper text disappears. Name changes no longer update signature."
+      - working: true
+        agent: "testing"
+        comment: "PASSED: Typed 'Marie' in Nom → signature shows 'Madame Marie'. Manually edited message by adding ' - Merci !' → helper text disappeared. Changed Nom to 'Sophie' → message still shows 'Marie' (not 'Sophie'), confirming auto-fill is disabled. Manual edit detection working correctly."
 
   - task: "Request type switching behavior"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/frontend/src/components/ContactForm.jsx"
     stuck_count: 0
     priority: "medium"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Switching between request types (découverte, inscription, info) handles message field appropriately. Switching back to découverte restores template if message was empty or still auto-filled."
+      - working: true
+        agent: "testing"
+        comment: "Minor: After manual edit, switching to 'Inscription' preserves the message (doesn't clear it). This is actually user-friendly behavior - preserves user edits. Switching back to 'Cours découverte' correctly restores the template. Core functionality works as expected."
 
   - task: "Course duration displays 1 HEURE"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/frontend/src/mock.js, /app/frontend/src/components/sections/ServicesSection.jsx"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "All three service cards (Cours Individuels, Cours Duo, Cours Semi-Collectifs) display '1 heure' as duration. Semi-Collectifs shows '3 à 8 personnes'."
+      - working: true
+        agent: "testing"
+        comment: "PASSED: Navigated to home page, scrolled to 'Trois façons de pratiquer' section. Found 3 service cards. All display '1 heure' as duration (3 instances found). 'Cours Semi-Collectifs' correctly shows '3 à 8 personnes'."
 
   - task: "Mobile responsiveness - hamburger menu and form layout"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/frontend/src/components/Navbar.jsx, /app/frontend/src/pages/Contact.jsx"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "main"
         comment: "Mobile view (390x844) shows hamburger menu button instead of desktop nav. Mobile menu includes all nav links and Cours découverte button. Contact form is responsive with proper stacking."
+      - working: true
+        agent: "testing"
+        comment: "PASSED: Set viewport to 390x844 (iPhone). Hamburger menu button visible. Clicked hamburger → mobile menu opened with all nav links and 'Cours découverte' button. Navigated to /contact → form is responsive with width 342px (fits within 390px viewport, no horizontal overflow)."
 
 metadata:
   created_by: "testing_agent"
@@ -300,3 +327,5 @@ agent_communication:
     message: "Previous testing completed for backend type hints - all passed. Now starting NEW testing cycle for Passion Pilates frontend features."
   - agent: "testing"
     message: "Starting comprehensive UI testing for 9 test scenarios covering studio pre-selection, message auto-fill, course duration, and mobile responsiveness."
+  - agent: "testing"
+    message: "TESTING COMPLETE: All 9 features tested successfully. 8 features working perfectly, 1 feature has minor behavior difference (request type switching preserves user edits, which is actually user-friendly). No console errors detected. All critical functionality working as expected. Screenshots captured for all test scenarios."

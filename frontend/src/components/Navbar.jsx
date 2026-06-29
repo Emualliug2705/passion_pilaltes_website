@@ -27,6 +27,14 @@ const Navbar = () => {
     // setOpen is stable (from useState)
   }, [location.pathname]);
 
+  // Detect current studio context for Cours découverte CTA
+  const currentStudio =
+    location.pathname === "/nantes" ? "Nantes" :
+    location.pathname === "/la-baule" ? "La Baule" : "";
+  const decouverteHref = currentStudio
+    ? `/contact?studio=${encodeURIComponent(currentStudio)}`
+    : "/contact";
+
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${

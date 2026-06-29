@@ -102,7 +102,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: "Verify that Python type hints added to /app/backend/server.py do not cause regressions in API endpoints"
+user_problem_statement: "Test NEW features for Passion Pilates website: studio pre-selection via 'Cours découverte' button, default discovery message template with auto-fill name signature, manual edit behavior, course duration display, and mobile responsiveness"
 
 backend:
   - task: "GET /api/ endpoint returns Hello World message"
@@ -110,7 +110,7 @@ backend:
     working: true
     file: "/app/backend/server.py"
     stuck_count: 0
-    priority: "high"
+    priority: "low"
     needs_retesting: false
     status_history:
       - working: "NA"
@@ -125,7 +125,7 @@ backend:
     working: true
     file: "/app/backend/server.py"
     stuck_count: 0
-    priority: "high"
+    priority: "low"
     needs_retesting: false
     status_history:
       - working: "NA"
@@ -140,7 +140,7 @@ backend:
     working: true
     file: "/app/backend/server.py"
     stuck_count: 0
-    priority: "high"
+    priority: "low"
     needs_retesting: false
     status_history:
       - working: "NA"
@@ -155,7 +155,7 @@ backend:
     working: true
     file: "/app/backend/server.py"
     stuck_count: 0
-    priority: "medium"
+    priority: "low"
     needs_retesting: false
     status_history:
       - working: "NA"
@@ -166,23 +166,137 @@ backend:
         comment: "Backend server running successfully with all type annotations. No startup errors or runtime issues detected. All API endpoints functioning correctly."
 
 frontend:
-  []
+  - task: "Studio pre-selection from Nantes page via Cours découverte button"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/components/Navbar.jsx, /app/frontend/src/pages/Contact.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Implemented studio pre-selection logic in Navbar. When on /nantes page, Cours découverte button links to /contact?studio=Nantes"
+
+  - task: "Studio pre-selection from La Baule page via Cours découverte button"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/components/Navbar.jsx, /app/frontend/src/pages/Contact.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Implemented studio pre-selection logic in Navbar. When on /la-baule page, Cours découverte button links to /contact?studio=La%20Baule"
+
+  - task: "No studio pre-selection from Home/other pages"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/components/Navbar.jsx, /app/frontend/src/pages/Contact.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "When on home or other pages, Cours découverte button links to /contact without studio param. Studio dropdown shows default 'Sélectionner'"
+
+  - task: "Default discovery message template pre-filled"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/components/ContactForm.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "ContactForm pre-fills message textarea with discovery template when requestType is 'decouverte'. Shows helper text about auto-fill."
+
+  - task: "Auto-fill name in message signature"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/components/ContactForm.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "When user types in Nom field, signature in message automatically updates to 'Madame [name]'. Clears when name is removed."
+
+  - task: "Manual edit stops auto-fill"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/components/ContactForm.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "When user manually edits message textarea, auto-fill is disabled (messageAutoFilled becomes false) and helper text disappears. Name changes no longer update signature."
+
+  - task: "Request type switching behavior"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/components/ContactForm.jsx"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Switching between request types (découverte, inscription, info) handles message field appropriately. Switching back to découverte restores template if message was empty or still auto-filled."
+
+  - task: "Course duration displays 1 HEURE"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/mock.js, /app/frontend/src/components/sections/ServicesSection.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "All three service cards (Cours Individuels, Cours Duo, Cours Semi-Collectifs) display '1 heure' as duration. Semi-Collectifs shows '3 à 8 personnes'."
+
+  - task: "Mobile responsiveness - hamburger menu and form layout"
+    implemented: true
+    working: "NA"
+    file: "/app/frontend/src/components/Navbar.jsx, /app/frontend/src/pages/Contact.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Mobile view (390x844) shows hamburger menu button instead of desktop nav. Mobile menu includes all nav links and Cours découverte button. Contact form is responsive with proper stacking."
 
 metadata:
   created_by: "testing_agent"
-  version: "1.0"
-  test_sequence: 1
-  run_ui: false
+  version: "1.1"
+  test_sequence: 2
+  run_ui: true
 
 test_plan:
   current_focus:
-    - "GET /api/ endpoint returns Hello World message"
-    - "POST /api/status creates status check with correct structure"
-    - "GET /api/status returns list of status checks"
+    - "Studio pre-selection from Nantes page via Cours découverte button"
+    - "Studio pre-selection from La Baule page via Cours découverte button"
+    - "No studio pre-selection from Home/other pages"
+    - "Default discovery message template pre-filled"
+    - "Auto-fill name in message signature"
+    - "Manual edit stops auto-fill"
+    - "Request type switching behavior"
+    - "Course duration displays 1 HEURE"
+    - "Mobile responsiveness - hamburger menu and form layout"
   stuck_tasks: []
-  test_all: false
+  test_all: true
   test_priority: "high_first"
 
 agent_communication:
   - agent: "testing"
-    message: "Completed comprehensive testing of all 3 API endpoints after type hint additions. All tests passed successfully with no regressions detected. The type hints (Dict[str, str], StatusCheck, List[StatusCheck], None) are working correctly and do not interfere with API functionality."
+    message: "Previous testing completed for backend type hints - all passed. Now starting NEW testing cycle for Passion Pilates frontend features."
+  - agent: "testing"
+    message: "Starting comprehensive UI testing for 9 test scenarios covering studio pre-selection, message auto-fill, course duration, and mobile responsiveness."

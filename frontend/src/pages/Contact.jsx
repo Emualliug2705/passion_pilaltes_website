@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Phone, Mail, MapPin } from "lucide-react";
 import { studios, siteInfo, galleryImages } from "../mock";
 import ContactForm from "../components/ContactForm";
@@ -60,6 +61,11 @@ const ContactDetails = () => (
 );
 
 const Contact = () => {
+  const [searchParams] = useSearchParams();
+  const studioParam = searchParams.get("studio") || "";
+  const validStudios = ["Nantes", "La Baule"];
+  const defaultStudio = validStudios.includes(studioParam) ? studioParam : "";
+
   useEffect(() => { window.scrollTo(0, 0); }, []);
   useReveal();
 
@@ -70,7 +76,7 @@ const Contact = () => {
         <div className="max-w-7xl mx-auto grid lg:grid-cols-5 gap-16 lg:gap-20">
           <ContactDetails />
           <div className="lg:col-span-3 reveal">
-            <ContactForm />
+            <ContactForm defaultStudio={defaultStudio} />
           </div>
         </div>
       </section>

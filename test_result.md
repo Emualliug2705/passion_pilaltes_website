@@ -421,15 +421,46 @@ frontend:
         agent: "testing"
         comment: "PASSED: All 3 scenarios tested. G1: Navigated to /nantes. G2: Clicked 'COURS DÉCOUVERTE' in navbar. G3: URL is /contact?studio=Nantes. G4: Studio dropdown shows 'Nantes'. G5: Message mentions 'au studio de Nantes'. Navigation from Nantes page with studio pre-selection working correctly after refactor."
 
+  - task: "Mobile responsiveness - Comprehensive testing (390x844)"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/components/Navbar.jsx, /app/frontend/src/pages/*.jsx, /app/frontend/tailwind.config.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "user"
+        comment: "User requested comprehensive mobile responsiveness test on all pages (/, /le-studio, /nantes, /la-baule, /contact) at 390x844 viewport. Need to verify: no horizontal scroll, readable text, proper image scaling, tap-friendly buttons, hamburger menu functionality, component-specific checks (hero, services cards, studios section, gallery grid, footer, carousels, reviews, contact form)."
+      - working: true
+        agent: "testing"
+        comment: "COMPREHENSIVE MOBILE TESTING COMPLETE - ALL PASSED ✅. Tested all 5 pages at 390x844 viewport. LAYOUT: No horizontal scroll on any page, all content fits within 390px viewport. NAVIGATION: Hamburger menu visible and functional on all pages, opens/closes correctly with all expected menu items (Accueil, Le Studio, Nantes, La Baule, Contact, Espace élève, Cours découverte). HOME PAGE: Hero section displays perfectly (342px × 182px, no overflow), services cards stack vertically (all 3 cards full-width 390px), studios section (Nantes/La Baule cards) stack vertically, gallery uses 2-column grid layout (verified via image positions), footer contains contact info and Cours découverte buttons. CONTACT PAGE: Form fits perfectly (342px < 390px), all form fields fit within viewport, request type buttons stack vertically. STUDIO PAGES: Content displays correctly, images load properly. No JavaScript errors detected (only Cloudflare RUM analytics blocked, which is expected). Screenshots captured for verification."
+
+  - task: "Tablet responsiveness - Comprehensive testing (768x1024)"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/components/Navbar.jsx, /app/frontend/src/pages/*.jsx, /app/frontend/tailwind.config.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "user"
+        comment: "User requested comprehensive tablet responsiveness test on all pages at 768x1024 viewport. Need to verify pages adapt with appropriate layouts (2-column where suitable), hamburger menu or desktop nav depending on breakpoint."
+      - working: true
+        agent: "testing"
+        comment: "COMPREHENSIVE TABLET TESTING COMPLETE - ALL PASSED ✅. Tested all 5 pages (/, /le-studio, /nantes, /la-baule, /contact) at 768x1024 viewport. LAYOUT: No horizontal scroll on any page, all content fits within 768px viewport. NAVIGATION: Hamburger menu visible at 768px breakpoint (mobile-style navigation), which is appropriate for tablet portrait mode. All pages render correctly with proper responsive layouts. Screenshots captured for verification."
+
 metadata:
   created_by: "testing_agent"
-  version: "1.3"
-  test_sequence: 4
+  version: "1.4"
+  test_sequence: 5
   run_ui: true
 
 test_plan:
   current_focus:
-    - "POST /api/contact endpoint - Email submission via Resend"
+    - "Mobile responsiveness - Comprehensive testing (390x844)"
+    - "Tablet responsiveness - Comprehensive testing (768x1024)"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
@@ -449,3 +480,7 @@ agent_communication:
     message: "NEW FEATURE TESTING: Testing newly added POST /api/contact endpoint with Resend email integration. Comprehensive test suite created with 9 tests covering happy paths (decouverte, inscription with courseType), validation (missing name, invalid email, empty message), MongoDB persistence, and regression tests for existing endpoints."
   - agent: "testing"
     message: "CONTACT ENDPOINT TESTING COMPLETE: ALL 9 TESTS PASSED ✅. Happy path tests: decouverte and inscription requests both returned 200 with ok=true and valid UUID. Validation tests: all 3 validation scenarios (empty name, invalid email, empty message) correctly returned 422 with appropriate Pydantic error messages. MongoDB persistence verified: both contact messages successfully saved to contact_messages collection with all fields intact. Regression tests: all existing endpoints (GET /api/, POST /api/status, GET /api/status) continue to work correctly. Email sending via Resend API working correctly using delivered@resend.dev test address. Backend logs confirm all requests handled properly. NO ISSUES FOUND - feature ready for production."
+  - agent: "testing"
+    message: "NEW MOBILE & TABLET RESPONSIVENESS TESTING: User requested comprehensive responsiveness testing across all pages at mobile (390x844) and tablet (768x1024) viewports. Testing all 5 pages (/, /le-studio, /nantes, /la-baule, /contact) with detailed component checks including: layout (horizontal scroll, text readability, image scaling), navigation (hamburger menu functionality), and page-specific components (hero sections, services cards, studios section, gallery grid, footer, contact form, carousels)."
+  - agent: "testing"
+    message: "MOBILE & TABLET RESPONSIVENESS TESTING COMPLETE: ALL TESTS PASSED ✅. MOBILE (390x844): All 5 pages tested - no horizontal scroll, hamburger menu functional, hero sections display correctly, services cards stack vertically, studios section stacks vertically, gallery uses 2-column grid, footer accessible, contact form fits perfectly (342px < 390px). TABLET (768x1024): All 5 pages tested - no horizontal scroll, hamburger menu visible (appropriate for tablet portrait), all pages render correctly. No JavaScript errors detected. All pages are fully responsive and usable on both mobile and tablet viewports. Screenshots captured for verification."

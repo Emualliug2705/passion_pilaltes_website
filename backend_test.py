@@ -305,10 +305,53 @@ def test_contact_validation_empty_message():
         print(f"❌ FAILED: Exception occurred - {str(e)}")
         return False
 
+def test_contact_special_characters_in_name():
+    """Test POST /api/contact with special characters in name (should sanitize)"""
+    print("\n" + "="*60)
+    print("TEST 9: POST /api/contact - Special Characters in Name (sanitization)")
+    print("="*60)
+    
+    try:
+        payload = {
+            "name": "Jean <hacker>",
+            "email": "delivered@resend.dev",
+            "phone": "06 12 34 56 78",
+            "studio": None,
+            "courseType": None,
+            "requestType": "info",
+            "message": "Test message with special characters in name"
+        }
+        print(f"Payload: {json.dumps(payload, indent=2)}")
+        print("Note: Name contains < and > characters that should be sanitized")
+        
+        response = requests.post(
+            f"{BACKEND_URL}/contact",
+            json=payload,
+            headers={"Content-Type": "application/json"}
+        )
+        print(f"Status Code: {response.status_code}")
+        print(f"Response: {response.json()}")
+        
+        if response.status_code == 200:
+            data = response.json()
+            if data.get("ok") == True and "id" in data:
+                print("✅ PASSED: Contact form submission successful with special characters (sanitized)")
+                return True, data["id"]
+            else:
+                print(f"❌ FAILED: Expected ok=True with id, got {data}")
+                return False, None
+        else:
+            print(f"❌ FAILED: Expected status 200, got {response.status_code}")
+            print(f"Response body: {response.text}")
+            return False, None
+    except Exception as e:
+        print(f"❌ FAILED: Exception occurred - {str(e)}")
+        return False, None
+
 def test_contact_mongodb_persistence(contact_ids):
     """Verify contact messages are persisted in MongoDB"""
     print("\n" + "="*60)
-    print("TEST 9: MongoDB Persistence - Verify contact messages saved")
+    print("TEST 10: MongoDB Persistence - Verify contact messages saved")
     print("="*60)
     
     try:
@@ -360,6 +403,7 @@ def run_all_tests():
         "test_validation_name": False,
         "test_validation_email": False,
         "test_validation_message": False,
+        "test_special_characters": False,
         "test_mongodb_persistence": False
     }
     
@@ -393,6 +437,11 @@ def run_all_tests():
     results["test_validation_email"] = test_contact_validation_invalid_email()
     results["test_validation_message"] = test_contact_validation_empty_message()
     
+    # Special characters test
+    results["test_special_characters"], id3 = test_contact_special_characters_in_name()
+    if id3:
+        contact_ids.append(id3)
+    
     # MongoDB persistence test
     if contact_ids:
         results["test_mongodb_persistence"] = test_contact_mongodb_persistence(contact_ids)
@@ -415,6 +464,7 @@ def run_all_tests():
     print(f"  Validation (missing name): {'✅ PASSED' if results['test_validation_name'] else '❌ FAILED'}")
     print(f"  Validation (invalid email): {'✅ PASSED' if results['test_validation_email'] else '❌ FAILED'}")
     print(f"  Validation (empty message): {'✅ PASSED' if results['test_validation_message'] else '❌ FAILED'}")
+    print(f"  Special characters (sanitization): {'✅ PASSED' if results['test_special_characters'] else '❌ FAILED'}")
     print(f"  MongoDB persistence: {'✅ PASSED' if results['test_mongodb_persistence'] else '❌ FAILED'}")
     
     passed = sum(results.values())

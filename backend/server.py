@@ -4,6 +4,7 @@ from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 import os
 import logging
+import re
 from pathlib import Path
 from pydantic import BaseModel, Field, EmailStr
 from typing import List, Dict, Optional
@@ -94,7 +95,25 @@ def _build_email_subject(payload: ContactRequest) -> str:
     }
     label = label_map.get(payload.requestType, "Demande")
     studio_part = f" - Studio {payload.studio}" if payload.studio else ""
-    return f"[Passion Pilates] {label}{studio_part} - {payload.name}"
+    # Include sender email in subject so it's visible even in mail previews
+    return f"[Passion Pilates] {label}{studio_part} — {payload.name} <{payload.email}>"
+
+
+def _build_from_address(payload: ContactRequest) -> str:
+    """Build a display-name From that shows the visitor in the inbox list.
+
+    Resend forces the email part to belong to a verified domain (default
+    onboarding@resend.dev), but we can freely customise the display name.
+    Result example: 'Sophie Dubois (sophie@x.fr) via Passion Pilates <onboarding@resend.dev>'
+    """
+    # Strip characters that would break the RFC 5322 display-name syntax
+    safe_name = re.sub(r'[<>"\\]', "", payload.name or "").strip() or "Visiteur"
+    safe_email = re.sub(r'[<>"\\\s]', "", payload.email or "").strip()
+    # Extract the email part from CONTACT_FROM_EMAIL (between < and >) — fallback to whole string
+    from_match = re.search(r"<([^>]+)>", CONTACT_FROM_EMAIL)
+    from_email_only = from_match.group(1) if from_match else CONTACT_FROM_EMAIL
+    label = f"{safe_name} ({safe_email}) via Passion Pilates" if safe_email else f"{safe_name} via Passion Pilates"
+    return f"{label} <{from_email_only}>"
 
 
 def _build_email_html(payload: ContactRequest) -> str:
@@ -178,20 +197,21 @@ async def submit_contact(payload: ContactRequest) -> ContactResponse:
 
     subject = _build_email_subject(payload)
 
-    # 1) Main email to the studio owner — sender is set as Reply-To
+    # 1) Main email to the studio owner — sender shows visitor name + email,
+    #    Reply-To is the visitor so a click on "Répondre" works.
     main_params = {
-        "from": CONTACT_FROM_EMAIL,
+        "from": _build_from_address(payload),
         "to": [CONTACT_TO_EMAIL],
         "reply_to": [payload.email],
         "subject": subject,
         "html": _build_email_html(payload),
     }
 
-    # 2) Auto confirmation copy to the original sender
+    # 2) Auto confirmation copy to the original sender (keeps neutral "From")
     confirmation_params = {
         "from": CONTACT_FROM_EMAIL,
         "to": [payload.email],
-        "subject": f"Confirmation — votre message à Passion Pilates",
+        "subject": "Confirmation — votre message à Passion Pilates",
         "html": _build_confirmation_html(payload),
     }
 

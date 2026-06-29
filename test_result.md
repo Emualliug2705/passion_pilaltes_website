@@ -180,6 +180,21 @@ backend:
         agent: "testing"
         comment: "COMPREHENSIVE TESTING COMPLETE - All 9 tests PASSED ✅. Happy path tests: (1) decouverte request with studio=Nantes returned 200 with ok=true and id, (2) inscription request with courseType='Cours Duo' and studio='La Baule' returned 200 with ok=true and id. Validation tests: (3) empty name returned 422 with Pydantic error, (4) invalid email 'not-an-email' returned 422 with email validation error, (5) empty message returned 422 with min_length error. MongoDB persistence: (6) verified both contact messages persisted in contact_messages collection with correct data (name, email, requestType, studio, courseType, message). Regression tests: (7) GET /api/ returns Hello World, (8) POST /api/status creates status check, (9) GET /api/status returns list. Backend logs show all requests handled correctly. Email sending via Resend API working (using delivered@resend.dev test address). NO ISSUES FOUND."
 
+  - task: "Dynamic From header in /api/contact endpoint - Visitor name/email in inbox"
+    implemented: true
+    working: true
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Updated /api/contact endpoint to dynamically set From header. Added _build_from_address(payload) helper that constructs From like 'Sophie Dubois (sophie@example.com) via Passion Pilates <onboarding@resend.dev>'. Subject now includes visitor email: '[Passion Pilates] Cours découverte - Studio Nantes — Sophie Dubois <sophie@example.com>'. Reply-To still set to visitor's email. Confirmation email to sender still uses neutral CONTACT_FROM_EMAIL. Name sanitization strips <, >, \", \\ characters to prevent RFC 5322 syntax issues."
+      - working: true
+        agent: "testing"
+        comment: "COMPREHENSIVE TESTING COMPLETE - All 10 tests PASSED ✅. Happy path tests: (1) decouverte request with name='Sophie Dubois', email='delivered@resend.dev', studio='Nantes' returned 200 with ok=true and valid UUID, (2) inscription request with name='Marie Laurent', courseType='Cours Duo', studio='La Baule' returned 200 with ok=true and valid UUID. Special characters test: (3) name='Jean <hacker>' (contains < and >) successfully sanitized and returned 200 without crashing - backend correctly strips dangerous characters. Validation tests: (4) empty name returned 422 with Pydantic min_length error as expected. Regression tests: (5) GET /api/ returns Hello World, (6) POST /api/status creates status check, (7) GET /api/status returns list. MongoDB persistence: (8) verified all 3 contact messages (including the one with special characters) persisted correctly in contact_messages collection with all fields intact. Backend logs confirm all requests handled properly. Email sending via Resend API working correctly with new dynamic From header. NO ISSUES FOUND - feature ready for production."
+
 frontend:
   - task: "Studio pre-selection from Nantes page via Cours découverte button"
     implemented: true
@@ -453,14 +468,13 @@ frontend:
 
 metadata:
   created_by: "testing_agent"
-  version: "1.4"
-  test_sequence: 5
+  version: "1.5"
+  test_sequence: 6
   run_ui: true
 
 test_plan:
   current_focus:
-    - "Mobile responsiveness - Comprehensive testing (390x844)"
-    - "Tablet responsiveness - Comprehensive testing (768x1024)"
+    - "Dynamic From header in /api/contact endpoint - Visitor name/email in inbox"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
@@ -484,3 +498,5 @@ agent_communication:
     message: "NEW MOBILE & TABLET RESPONSIVENESS TESTING: User requested comprehensive responsiveness testing across all pages at mobile (390x844) and tablet (768x1024) viewports. Testing all 5 pages (/, /le-studio, /nantes, /la-baule, /contact) with detailed component checks including: layout (horizontal scroll, text readability, image scaling), navigation (hamburger menu functionality), and page-specific components (hero sections, services cards, studios section, gallery grid, footer, contact form, carousels)."
   - agent: "testing"
     message: "MOBILE & TABLET RESPONSIVENESS TESTING COMPLETE: ALL TESTS PASSED ✅. MOBILE (390x844): All 5 pages tested - no horizontal scroll, hamburger menu functional, hero sections display correctly, services cards stack vertically, studios section stacks vertically, gallery uses 2-column grid, footer accessible, contact form fits perfectly (342px < 390px). TABLET (768x1024): All 5 pages tested - no horizontal scroll, hamburger menu visible (appropriate for tablet portrait), all pages render correctly. No JavaScript errors detected. All pages are fully responsive and usable on both mobile and tablet viewports. Screenshots captured for verification."
+  - agent: "testing"
+    message: "DYNAMIC FROM HEADER TESTING COMPLETE: ALL 10 TESTS PASSED ✅. Tested updated /api/contact endpoint with dynamic From header feature. Happy path tests: (1) decouverte request with Sophie Dubois/Nantes returned 200, (2) inscription request with Marie Laurent/Cours Duo/La Baule returned 200. Special characters test: (3) name with '<hacker>' successfully sanitized and returned 200 without crashing - backend correctly strips dangerous characters (<, >, \", \\). Validation test: (4) empty name correctly returned 422. Regression tests: (5-7) all existing endpoints continue to work. MongoDB persistence: (8) all 3 contact messages persisted correctly including the one with special characters. Email sending via Resend API working with new dynamic From header. Backend logs confirm proper handling. NO ISSUES FOUND - feature ready for production."

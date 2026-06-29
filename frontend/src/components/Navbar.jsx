@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
-import { siteInfo } from "../mock";
 
 const links = [
   { to: "/", label: "Accueil" },
@@ -56,14 +55,12 @@ const Navbar = () => {
               {l.label}
             </Link>
           ))}
-          <a
-            href={siteInfo.planningUrl}
-            target="_blank"
-            rel="noreferrer"
+          <Link
+            to={decouverteHref}
             className="text-[12px] uppercase tracking-[0.25em] px-6 py-3 border border-[#3a2f24] text-[#3a2f24] hover:bg-[#3a2f24] hover:text-[#faf7f2] transition-colors duration-300"
           >
-            Réserver
-          </a>
+            Cours découverte
+          </Link>
         </nav>
 
         <button
@@ -87,14 +84,12 @@ const Navbar = () => {
                 {l.label}
               </Link>
             ))}
-            <a
-              href={siteInfo.planningUrl}
-              target="_blank"
-              rel="noreferrer"
+            <Link
+              to={decouverteHref}
               className="text-sm uppercase tracking-[0.25em] px-6 py-3 border border-[#3a2f24] text-[#3a2f24] text-center"
             >
-              Réserver
-            </a>
+              Cours découverte
+            </Link>
           </div>
         </div>
       )}

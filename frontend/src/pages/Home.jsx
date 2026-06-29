@@ -5,7 +5,7 @@ import ServicesSection from "../components/sections/ServicesSection";
 import PrinciplesSection from "../components/sections/PrinciplesSection";
 import StudiosSection from "../components/sections/StudiosSection";
 import { GallerySection, TestimonialsSection } from "../components/sections/GalleryTestimonials";
-import { IntroSection, AboutBettySection, FinalCTASection } from "../components/sections/IntroAbout";
+import { IntroSection, AboutBettySection, DiscoverySection, FinalCTASection } from "../components/sections/IntroAbout";
 
 const Home = () => {
   useReveal();
@@ -15,6 +15,7 @@ const Home = () => {
       <HeroSection />
       <IntroSection />
       <ServicesSection />
+      <DiscoverySection />
       <AboutBettySection />
       <PrinciplesSection />
       <StudiosSection />

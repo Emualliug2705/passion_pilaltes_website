@@ -19,13 +19,16 @@ const ContactHero = () => (
 
 const ContactDetails = () => (
   <div className="lg:col-span-2 reveal">
-    <p className="text-xs tracking-[0.4em] uppercase text-[#8a7a5e] mb-6">Une question&nbsp;?</p>
+    <p className="text-xs tracking-[0.4em] uppercase text-[#8a7a5e] mb-6">Cours découverte &middot; Information</p>
     <h2 className="font-serif text-4xl md:text-5xl text-[#2c2520] leading-tight">
-      Écrivez-nous, nous <em className="italic font-light">vous répondrons.</em>
+      Écrivez-nous, nous <em className="italic font-light">vous recontactons.</em>
     </h2>
     <div className="w-16 h-px bg-[#8a7a5e] my-8" />
+    <p className="text-[#5c5147] leading-[1.9] mb-6">
+      Pour toute demande de <strong className="font-medium text-[#3a2f24]">cours découverte</strong>, d&rsquo;inscription ou d&rsquo;information, n&rsquo;hésitez pas à nous contacter via le formulaire ci-contre.
+    </p>
     <p className="text-[#5c5147] leading-[1.9] mb-10">
-      Pour toute demande d'inscription, d'information ou pour planifier un cours découverte, n'hésitez pas à nous contacter directement ou via le formulaire ci-contre.
+      Pour un premier cours, merci de nous solliciter au moins <strong className="font-medium text-[#3a2f24]">7 jours à l&rsquo;avance</strong>. Betty ou Mathilde vous recontactera personnellement pour échanger sur vos attentes et fixer votre première séance.
     </p>
 
     <div className="space-y-6">
@@ -40,7 +43,7 @@ const ContactDetails = () => (
         <Mail size={18} className="text-[#8a7a5e] mt-1" />
         <div>
           <p className="text-[11px] uppercase tracking-[0.3em] text-[#8a7a5e] mb-1">Email</p>
-          <a href={`mailto:${siteInfo.email}`} className="text-[#2c2520] hover:text-[#7a6a4e] transition-colors">{siteInfo.email}</a>
+          <a href={`mailto:${siteInfo.email}`} className="text-[#2c2520] hover:text-[#7a6a4e] transition-colors break-all">{siteInfo.email}</a>
         </div>
       </div>
       {studios.map((s) => (

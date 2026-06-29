@@ -3,13 +3,20 @@
 export const siteInfo = {
   brand: "Passion Pilates",
   owner: "Betty ADRIEN",
+  instructors: ["Betty ADRIEN", "Mathilde ADRIEN"],
   tagline: "L'art du mouvement, la passion du bien-être",
   description: "Studios de Pilates haut de gamme à Nantes et La Baule. Cours individuels, duo et semi-collectifs sur appareils authentiques.",
   phone: "06 76 90 26 34",
   email: "passionpilates44@gmail.com",
   instagram: "#",
   facebook: "#",
-  planningUrl: "https://www.deciplus.pro/"
+  planningUrl: "https://www.deciplus.pro/",
+  certification: {
+    school: "École de Formation Pilates de Nantes",
+    accreditation: "FPMP — Fédération des Professionnels du Pilates",
+    url: "https://www.fpmp.fr/dsdsheet/ecole-de-formation-pilates-de-nantes/"
+  },
+  discoveryNotice: "Réservez votre cours découverte au moins 7 jours à l'avance via notre formulaire de contact. Betty ou Mathilde vous recontactera personnellement."
 };
 
 export const studios = [
@@ -49,20 +56,20 @@ export const services = [
   {
     title: "Cours Individuels",
     description: "Un accompagnement personnalisé, adapté à vos objectifs et à votre rythme. Le format idéal pour progresser rapidement et en toute sécurité.",
-    duration: "55 min",
+    duration: "1 heure",
     capacity: "1 personne"
   },
   {
     title: "Cours Duo",
     description: "Partagez l'expérience à deux. Un cours convivial où vous bénéficiez d'un suivi attentif tout en partageant un moment privilégié.",
-    duration: "55 min",
+    duration: "1 heure",
     capacity: "2 personnes"
   },
   {
     title: "Cours Semi-Collectifs",
     description: "Une formule en petit groupe pour conjuguer émulation et précision. Idéal pour pratiquer régulièrement avec un encadrement de qualité.",
-    duration: "55 min",
-    capacity: "4 personnes max"
+    duration: "1 heure",
+    capacity: "3 à 8 personnes"
   }
 ];
 

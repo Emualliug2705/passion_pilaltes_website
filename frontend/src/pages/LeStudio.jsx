@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Award } from "lucide-react";
 import { equipment, services, galleryImages, aboutImage, siteInfo } from "../mock";
 import useReveal from "../hooks/useReveal";
 import PrinciplesSection from "../components/sections/PrinciplesSection";
@@ -22,7 +22,7 @@ const LeStudioIntro = () => (
   <section className="py-24 md:py-32 px-6 md:px-10">
     <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-16 lg:gap-20 items-center">
       <div className="reveal">
-        <p className="text-xs tracking-[0.4em] uppercase text-[#8a7a5e] mb-6">L'esprit Passion Pilates</p>
+        <p className="text-xs tracking-[0.4em] uppercase text-[#8a7a5e] mb-6">L&rsquo;esprit Passion Pilates</p>
         <h2 className="font-serif text-4xl md:text-5xl text-[#2c2520] leading-tight">
           Une méthode, <em className="italic font-light">deux studios.</em>
         </h2>
@@ -30,9 +30,31 @@ const LeStudioIntro = () => (
         <p className="text-[#5c5147] leading-[1.9] mb-6">
           Passion Pilates propose à ses élèves un accompagnement personnalisé dans deux studios pensés pour la qualité de la pratique. Que vous soyez à Nantes ou à La Baule, vous y retrouverez la même exigence, le même matériel professionnel et la même attention.
         </p>
-        <p className="text-[#5c5147] leading-[1.9]">
-          Sous la direction de {siteInfo.owner}, chaque séance est conçue pour respecter le corps, ses besoins et ses objectifs.
+        <p className="text-[#5c5147] leading-[1.9] mb-8">
+          Sous la direction de <strong className="font-medium text-[#3a2f24]">Betty &amp; Mathilde ADRIEN</strong>, chaque séance est conçue pour respecter le corps, ses besoins et ses objectifs.
         </p>
+
+        <div className="border border-[#c9bda4]/60 bg-[#f2ebdf]/40 p-5">
+          <div className="flex items-start gap-3">
+            <Award size={20} className="text-[#7a6a4e] mt-1 flex-shrink-0" />
+            <div>
+              <p className="text-xs uppercase tracking-[0.3em] text-[#7a6a4e] mb-2">Formation &amp; Agrément</p>
+              <p className="text-sm text-[#3a2f24] leading-relaxed">
+                Betty et Mathilde ADRIEN sont toutes deux diplômées de l&rsquo;
+                <strong className="font-medium">{siteInfo.certification.school}</strong>. Nos studios sont agréés{" "}
+                <a
+                  href={siteInfo.certification.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="underline underline-offset-2 hover:text-[#7a6a4e]"
+                >
+                  FPMP
+                </a>{" "}
+                &mdash; Fédération des Professionnels du Pilates.
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
       <div className="reveal aspect-[4/5] overflow-hidden">
         <img src={aboutImage} alt="Studio" className="w-full h-full object-cover" />
@@ -98,12 +120,18 @@ const FinalCTA = () => (
       <h2 className="font-serif text-4xl md:text-5xl text-[#2c2520] leading-tight">
         Prêt(e) à découvrir <em className="italic font-light">votre studio&nbsp;?</em>
       </h2>
+      <p className="text-[#5c5147] mt-6 max-w-xl mx-auto leading-relaxed">
+        Demandez votre cours découverte au moins 7 jours à l&rsquo;avance via le formulaire de contact.
+      </p>
       <div className="mt-12 flex flex-wrap gap-4 justify-center">
-        <Link to="/nantes" className="px-10 py-4 bg-[#3a2f24] text-[#faf7f2] text-xs uppercase tracking-[0.3em] hover:bg-[#7a6a4e] transition-colors inline-flex items-center gap-3">
-          Studio Nantes <ArrowRight size={14} />
+        <Link to="/contact" className="px-10 py-4 bg-[#3a2f24] text-[#faf7f2] text-xs uppercase tracking-[0.3em] hover:bg-[#7a6a4e] transition-colors inline-flex items-center gap-3">
+          Cours découverte <ArrowRight size={14} />
+        </Link>
+        <Link to="/nantes" className="px-10 py-4 border border-[#3a2f24] text-[#3a2f24] text-xs uppercase tracking-[0.3em] hover:bg-[#3a2f24] hover:text-[#faf7f2] transition-colors inline-flex items-center gap-3">
+          Studio Nantes
         </Link>
         <Link to="/la-baule" className="px-10 py-4 border border-[#3a2f24] text-[#3a2f24] text-xs uppercase tracking-[0.3em] hover:bg-[#3a2f24] hover:text-[#faf7f2] transition-colors inline-flex items-center gap-3">
-          Studio La Baule <ArrowRight size={14} />
+          Studio La Baule
         </Link>
       </div>
     </div>

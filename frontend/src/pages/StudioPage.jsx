@@ -114,9 +114,9 @@ const StudioFooterCTA = ({ other }) => (
   <section className="py-20 md:py-24 bg-[#2c2520] text-[#faf7f2] px-6 md:px-10">
     <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
       <div className="reveal">
-        <p className="text-xs tracking-[0.4em] uppercase text-[#a89878] mb-4">Gérez votre pratique</p>
+        <p className="text-xs tracking-[0.4em] uppercase text-[#a89878] mb-4">Élèves inscrits</p>
         <h3 className="font-serif text-3xl md:text-4xl mb-4">Planning Deciplus</h3>
-        <p className="text-[#c9bda4] leading-relaxed mb-6">Accédez à votre espace pour réserver, modifier ou annuler vos séances.</p>
+        <p className="text-[#c9bda4] leading-relaxed mb-6">Accédez à votre espace personnel pour réserver, modifier ou annuler vos séances.</p>
         <a href={siteInfo.planningUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-3 px-8 py-3 border border-[#faf7f2] text-xs uppercase tracking-[0.3em] hover:bg-[#faf7f2] hover:text-[#2c2520] transition-colors">
           Accéder au planning <ArrowRight size={14} />
         </a>
@@ -124,7 +124,7 @@ const StudioFooterCTA = ({ other }) => (
       <div className="reveal md:text-right">
         <p className="text-xs tracking-[0.4em] uppercase text-[#a89878] mb-4">Découvrez aussi</p>
         <h3 className="font-serif text-3xl md:text-4xl mb-4">Studio de {other.name}</h3>
-        <p className="text-[#c9bda4] leading-relaxed mb-6">{other.address} — {other.postal}</p>
+        <p className="text-[#c9bda4] leading-relaxed mb-6">{other.address} &mdash; {other.postal}</p>
         <Link to={`/${other.id}`} className="inline-flex items-center gap-3 px-8 py-3 border border-[#faf7f2] text-xs uppercase tracking-[0.3em] hover:bg-[#faf7f2] hover:text-[#2c2520] transition-colors">
           Visiter <ArrowRight size={14} />
         </Link>
@@ -154,12 +154,12 @@ const StudioPage = ({ studioId }) => {
       <section className="py-24 md:py-32 px-6 md:px-10">
         <div className="max-w-4xl mx-auto">
           <div className="text-center reveal mb-12">
-            <p className="text-xs tracking-[0.4em] uppercase text-[#8a7a5e] mb-6">Nous contacter</p>
+            <p className="text-xs tracking-[0.4em] uppercase text-[#8a7a5e] mb-6">Première visite</p>
             <h2 className="font-serif text-4xl md:text-5xl text-[#2c2520]">
-              Inscrivez-vous au studio de <em className="italic font-light">{studio.name}</em>
+              Demandez votre cours <em className="italic font-light">découverte à {studio.name}</em>
             </h2>
             <p className="text-[#5c5147] mt-6 max-w-xl mx-auto">
-              Si vous souhaitez vous inscrire ou obtenir des informations, renseignez les champs ci-dessous. Nous vous répondrons rapidement.
+              À réserver au moins 7 jours à l&rsquo;avance via le formulaire ci-dessous. Betty ou Mathilde vous recontactera personnellement.
             </p>
           </div>
           <div className="reveal">
